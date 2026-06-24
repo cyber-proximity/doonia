@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  /* Inter font */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Primary brand color: #00B5C8 (teal) */
+  --color-primary-50:  #e6f9fb;
+  --color-primary-100: #c0f0f5;
+  --color-primary-200: #85e2ed;
+  --color-primary-300: #3dd0e2;
+  --color-primary-400: #00bdd3;
+  --color-primary-500: #00B5C8;
+  --color-primary-600: #009aab;
+  --color-primary-700: #007a87;
+  --color-primary-800: #005f69;
+  --color-primary-900: #003d44;
+  --color-primary-950: #002028;
+
+  /* Secondary brand color: #6B3FA0 (purple) */
+  --color-secondary-50:  #f3edf9;
+  --color-secondary-100: #e4d6f3;
+  --color-secondary-200: #caaee7;
+  --color-secondary-300: #af85db;
+  --color-secondary-400: #8f5dc9;
+  --color-secondary-500: #6B3FA0;
+  --color-secondary-600: #5a3487;
+  --color-secondary-700: #48296c;
+  --color-secondary-800: #371f53;
+  --color-secondary-900: #26143a;
+  --color-secondary-950: #150a20;
+}
+
+/* Add unprefixed text-size-adjust alongside Tailwind's -webkit- prefixed version */
+html, :host {
+  text-size-adjust: 100%;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: #ffffff;
+  color: #171717;
+}
+
+/*
+  Chrome/Edge on Windows dark mode sets -webkit-text-fill-color on native form
+  controls. That property overrides `color` entirely for text rendering, making
+  typed text invisible on white backgrounds. We override it explicitly here.
+*/
+input,
+select,
+textarea {
+  color: #171717;
+  -webkit-text-fill-color: #171717;
+  background-color: #ffffff;
+  opacity: 1;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+  -webkit-text-fill-color: #9ca3af;
+  opacity: 1;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}

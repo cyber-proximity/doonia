@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local notes/plans (not needed in repo)
+mainplan.md
+CLAUDE_BUILD_INSTRUCTIONS.md
+logo.jpeg
+
+# Claude local settings
+.claude/
