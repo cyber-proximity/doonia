@@ -9,19 +9,15 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-
 class CategoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        $categories = Cache::remember('categories.all', 600, function () {
-            return Category::query()
-                ->where('status', 'active')
-                ->withCount(['products' => fn ($q) => $q->where('status', 'active')])
-                ->orderBy('sort_order')
-                ->get();
-        });
+        $categories = Category::query()
+            ->where('status', 'active')
+            ->withCount(['products' => fn ($q) => $q->where('status', 'active')])
+            ->orderBy('sort_order')
+            ->get();
 
         return response()->json([
             'status' => 'success',
