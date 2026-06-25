@@ -23,6 +23,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[0],
     images: [{ id: 1, url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop", altText: "Wireless Headphones", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 2,
@@ -37,6 +39,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[1],
     images: [{ id: 2, url: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=600&h=600&fit=crop", altText: "Ankara Shirt", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 3,
@@ -51,6 +55,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[2],
     images: [{ id: 3, url: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600&h=600&fit=crop", altText: "Smart Blender", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 4,
@@ -65,6 +71,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[3],
     images: [{ id: 4, url: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&h=600&fit=crop", altText: "Skincare Set", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 5,
@@ -79,6 +87,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[4],
     images: [{ id: 5, url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop", altText: "Running Sneakers", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 6,
@@ -93,6 +103,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[0],
     images: [{ id: 6, url: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&h=600&fit=crop", altText: "Action Camera", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 7,
@@ -107,6 +119,8 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[5],
     images: [{ id: 7, url: "https://images.unsplash.com/photo-1566140967404-b8b3932483f5?w=600&h=600&fit=crop", altText: "Ride-On Toy", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
   {
     id: 8,
@@ -121,5 +135,7 @@ export const mockProducts: Product[] = [
     featured: true,
     category: mockCategories[2],
     images: [{ id: 8, url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=600&fit=crop", altText: "Coffee Table", isPrimary: true }],
+    avgRating: 0,
+    reviewCount: 0,
   },
 ];

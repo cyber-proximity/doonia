@@ -175,7 +175,6 @@ export async function getProductBySlug(
   try {
     const res = await fetch(`${BASE}/products/${slug}`, {
       next: { revalidate: 60 },
-      headers: NGROK_HEADER,
     });
     if (!res.ok) return null;
     const { data } = (await res.json()) as { data: RawProduct };
