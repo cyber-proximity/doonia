@@ -10,6 +10,7 @@
         "ext-exif": "*",
         "ext-intl": "*",
         "ext-pcntl": "*",
+        "ext-pdo_mysql": "*",
         "ext-zip": "*",
         "filament/filament": "^4.0",
         "laravel/framework": "^13.8",
