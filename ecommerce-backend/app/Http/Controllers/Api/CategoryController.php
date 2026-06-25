@@ -13,16 +13,25 @@ class CategoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        $categories = Category::query()
-            ->where('status', 'active')
-            ->withCount(['products' => fn ($q) => $q->where('status', 'active')])
-            ->orderBy('sort_order')
-            ->get();
+        try {
+            $categories = Category::query()
+                ->where('status', 'active')
+                ->withCount(['products' => fn ($q) => $q->where('status', 'active')])
+                ->orderBy('sort_order')
+                ->get();
 
-        return response()->json([
-            'status' => 'success',
-            'data'   => CategoryResource::collection($categories),
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data'   => CategoryResource::collection($categories),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+                'file'    => basename($e->getFile()),
+                'line'    => $e->getLine(),
+            ], 500);
+        }
     }
 
     public function products(Request $request, string $slug): JsonResponse
