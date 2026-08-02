@@ -49,10 +49,12 @@ class ProductsTable
                         ? 'danger' : 'success'),
                 TextColumn::make('status')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => \App\Models\Product::STATUSES[$state] ?? $state)
                     ->color(fn (string $state): string => match ($state) {
-                        'active'   => 'success',
-                        'inactive' => 'danger',
-                        default    => 'gray',
+                        'active'         => 'success',
+                        'inactive'       => 'danger',
+                        'pending_review' => 'warning',
+                        default          => 'gray',
                     }),
                 IconColumn::make('featured')
                     ->boolean(),
@@ -67,7 +69,7 @@ class ProductsTable
                     ->searchable()
                     ->preload(),
                 SelectFilter::make('status')
-                    ->options(['active' => 'Active', 'inactive' => 'Inactive']),
+                    ->options(\App\Models\Product::STATUSES),
                 Filter::make('low_stock')
                     ->label('Low stock only')
                     ->query(fn (Builder $q) => $q->whereColumn('stock_quantity', '<=', 'low_stock_threshold')),
@@ -81,17 +83,22 @@ class ProductsTable
                     BulkAction::make('activate')
                         ->label('Activate selected')
                         ->icon('heroicon-o-check-circle')
+                        ->visible(fn () => auth()->user()->hasRole('admin'))
                         ->action(fn (Collection $records) => $records->each->update(['status' => 'active']))
                         ->requiresConfirmation(),
                     BulkAction::make('deactivate')
                         ->label('Deactivate selected')
                         ->icon('heroicon-o-x-circle')
                         ->color('warning')
+                        ->visible(fn () => auth()->user()->hasRole('admin'))
                         ->action(fn (Collection $records) => $records->each->update(['status' => 'inactive']))
                         ->requiresConfirmation(),
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->hasRole('admin')),
+                    ForceDeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->hasRole('admin')),
+                    RestoreBulkAction::make()
+                        ->visible(fn () => auth()->user()->hasRole('admin')),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

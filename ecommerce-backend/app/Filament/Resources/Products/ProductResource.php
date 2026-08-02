@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use UnitEnum;
 
@@ -42,6 +43,50 @@ class ProductResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return ['name', 'sku'];
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasAnyRole(['admin', 'staff']);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        $user = auth()->user();
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+        return $user->hasRole('staff')
+            && $record->created_by === $user->id
+            && in_array($record->status, ['draft', 'pending_review']);
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        $user = auth()->user();
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+        return $user->hasRole('staff')
+            && $record->created_by === $user->id
+            && in_array($record->status, ['draft', 'pending_review']);
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery()
+            ->withoutGlobalScopes([SoftDeletingScope::class]);
+
+        if (auth()->user()->hasRole('staff')) {
+            $query->where('created_by', auth()->id());
+        }
+
+        return $query;
     }
 
     public static function getRelations(): array

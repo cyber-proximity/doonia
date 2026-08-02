@@ -80,12 +80,18 @@ class ProductForm
                     ->columns(2)
                     ->schema([
                         Select::make('status')
-                            ->options(['active' => 'Active', 'inactive' => 'Inactive'])
-                            ->default('active')
+                            ->options(fn () => auth()->user()->hasRole('admin')
+                                ? \App\Models\Product::STATUSES
+                                : ['draft' => 'Draft', 'pending_review' => 'Pending Review']
+                            )
+                            ->default(fn () => auth()->user()->hasRole('admin') ? 'active' : 'draft')
+                            ->disabled(fn () => auth()->user()->hasRole('staff'))
+                            ->dehydrated()
                             ->required(),
                         Toggle::make('featured')
                             ->label('Featured product')
-                            ->default(false),
+                            ->default(false)
+                            ->hidden(fn () => auth()->user()->hasRole('staff')),
                     ]),
 
                 Section::make('Images')
