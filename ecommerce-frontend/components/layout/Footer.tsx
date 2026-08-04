@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Share2, Camera, MessageCircle, PlayCircle } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { FaFacebook, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const shopLinks = [
   { label: "All Products",    href: "/products" },
@@ -53,17 +55,20 @@ export default function Footer() {
               Your trusted online marketplace for quality products delivered across Ghana. Fast, secure, and affordable.
             </p>
             <div className="flex items-center gap-3 pt-1">
-              <a href="#" aria-label="Facebook"  className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary-600 hover:text-white transition-colors">
-                <Share2 size={15} />
+              <a href="#" aria-label="WhatsApp" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#25D366] hover:text-white transition-colors">
+                <FaWhatsapp size={15} />
               </a>
-              <a href="#" aria-label="Instagram" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary-600 hover:text-white transition-colors">
-                <Camera size={15} />
+              <a href="#" aria-label="Facebook" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-colors">
+                <FaFacebook size={15} />
               </a>
-              <a href="#" aria-label="Twitter"   className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary-600 hover:text-white transition-colors">
-                <MessageCircle size={15} />
+              <a href="#" aria-label="Instagram" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#E1306C] hover:text-white transition-colors">
+                <FaInstagram size={15} />
               </a>
-              <a href="#" aria-label="YouTube"   className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary-600 hover:text-white transition-colors">
-                <PlayCircle size={15} />
+              <a href="#" aria-label="X" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-black hover:text-white transition-colors">
+                <FaXTwitter size={15} />
+              </a>
+              <a href="#" aria-label="TikTok" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-black hover:text-white transition-colors">
+                <FaTiktok size={15} />
               </a>
             </div>
           </div>
