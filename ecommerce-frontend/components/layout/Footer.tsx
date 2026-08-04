@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { FaFacebook, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaWhatsapp, FaTiktok, FaApple, FaGooglePlay } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 const shopLinks = [
@@ -35,10 +35,10 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 text-xs font-medium cursor-pointer hover:bg-gray-800 transition-colors">
-              <span className="text-base">🍎</span> App Store
+              <FaApple size={16} /> App Store
             </div>
             <div className="flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 text-xs font-medium cursor-pointer hover:bg-gray-800 transition-colors">
-              <span className="text-base">▶</span> Google Play
+              <FaGooglePlay size={14} /> Google Play
             </div>
           </div>
         </div>

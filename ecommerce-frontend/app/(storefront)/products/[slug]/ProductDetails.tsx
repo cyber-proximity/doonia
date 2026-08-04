@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ShoppingCart, Minus, Plus, Truck, ShieldCheck,
-  RefreshCw, Heart, Share2, ZoomIn, CheckCircle, X,
+  RefreshCw, Heart, ZoomIn, CheckCircle, X,
   MapPin, Store, Package, ChevronLeft, ChevronRight,
 } from "lucide-react";
+import { FaFacebook, FaWhatsapp } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { Product } from "@/types";
 import { formatPrice, getDiscountPercent } from "@/lib/utils";
 import { useCartStore } from "@/store/cartStore";
@@ -183,21 +185,30 @@ export default function ProductDetails({ product, related }: Props) {
             <div className="pt-2 border-t border-gray-100">
               <p className="text-[11px] text-gray-500 font-semibold mb-2 uppercase tracking-wide">Share This Product</p>
               <div className="flex gap-2">
-                {[
-                  { label: "FB",  color: "text-blue-600 hover:bg-blue-50 border-blue-200" },
-                  { label: "TW",  color: "text-sky-500 hover:bg-sky-50 border-sky-200" },
-                  { label: "WA",  color: "text-green-600 hover:bg-green-50 border-green-200" },
-                ].map(({ label, color }) => (
-                  <button
-                    key={label}
-                    className={`text-[11px] font-bold px-3 py-1 rounded border transition-colors ${color}`}
-                  >
-                    {label}
-                  </button>
-                ))}
-                <button className="p-1.5 rounded border border-gray-200 text-gray-400 hover:text-primary-500 hover:border-primary-300 transition-colors">
-                  <Share2 size={13} />
-                </button>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-colors border border-gray-200"
+                  aria-label="Share on Facebook"
+                >
+                  <FaFacebook size={14} />
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}&text=${encodeURIComponent(product.name)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-black hover:bg-black hover:text-white transition-colors border border-gray-200"
+                  aria-label="Share on X"
+                >
+                  <FaXTwitter size={14} />
+                </a>
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(product.name + " " + (typeof window !== "undefined" ? window.location.href : ""))}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors border border-gray-200"
+                  aria-label="Share on WhatsApp"
+                >
+                  <FaWhatsapp size={14} />
+                </a>
               </div>
             </div>
           </div>
