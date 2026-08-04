@@ -10,7 +10,12 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LowStockWidget extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 4;
+
+    public static function canView(): bool
+    {
+        return auth()->check() && auth()->user()->hasRole('admin');
+    }
 
     protected int|string|array $columnSpan = 'full';
 

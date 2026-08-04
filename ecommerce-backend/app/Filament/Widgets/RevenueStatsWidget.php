@@ -11,6 +11,11 @@ class RevenueStatsWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
+    public static function canView(): bool
+    {
+        return auth()->check() && auth()->user()->hasRole('admin');
+    }
+
     protected function getStats(): array
     {
         $now = Carbon::now();
