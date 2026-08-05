@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   ShoppingCart, User, Package, LogOut,
-  Menu, X, ChevronRight, LayoutGrid,
+  ChevronRight, LayoutGrid,
 } from "lucide-react";
 import { useCartStore, selectItemCount } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
@@ -17,7 +17,6 @@ import InlineSearchBar from "@/components/search/InlineSearchBar";
 interface NavCategory { id: number; name: string; slug: string; }
 
 export default function Header() {
-  const [menuOpen, setMenuOpen]           = useState(false);
   const [dropdownOpen, setDropdownOpen]   = useState(false);
   const [catOpen, setCatOpen]             = useState(false);
   const [navCategories, setNavCategories] = useState<NavCategory[]>([]);
@@ -172,10 +171,10 @@ export default function Header() {
             </Link>
           )}
 
-          {/* Cart */}
+          {/* Cart — hidden on mobile (lives in BottomNav) */}
           <Link
             href="/cart"
-            className="relative flex flex-col items-center gap-0.5 px-2 py-1 text-white/90 hover:text-white transition-colors shrink-0"
+            className="relative hidden md:flex flex-col items-center gap-0.5 px-2 py-1 text-white/90 hover:text-white transition-colors shrink-0"
             aria-label="Cart"
           >
             <div className="relative">
@@ -188,67 +187,10 @@ export default function Header() {
             </div>
             <span className="text-[10px] leading-none font-medium hidden lg:block">Cart</span>
           </Link>
-
-          {/* Mobile menu toggle */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors shrink-0"
-            aria-label="Menu"
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </div>
 
 
-      {/* ── Mobile slide-down menu ── */}
-      {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
-          <div className="px-4 py-3 space-y-1">
-            {[
-              { label: "Home",         href: "/" },
-              { label: "Shop",         href: "/products" },
-              { label: "Deals",        href: "/deals" },
-              { label: "New Arrivals", href: "/products?sort=newest" },
-            ].map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                onClick={() => setMenuOpen(false)}
-                className="block py-2.5 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
-              >
-                {l.label}
-              </Link>
-            ))}
-
-            <div className="border-t border-gray-100 pt-2 mt-2">
-              {isAuthenticated ? (
-                <>
-                  <Link href="/account" onClick={() => setMenuOpen(false)}
-                    className="block py-2.5 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600">
-                    My Profile
-                  </Link>
-                  <Link href="/account/orders" onClick={() => setMenuOpen(false)}
-                    className="block py-2.5 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600">
-                    My Orders
-                  </Link>
-                  <button
-                    onClick={() => { setMenuOpen(false); logout(); }}
-                    className="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <Link href="/login" onClick={() => setMenuOpen(false)}
-                  className="block py-2.5 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600">
-                  Login / Register
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
