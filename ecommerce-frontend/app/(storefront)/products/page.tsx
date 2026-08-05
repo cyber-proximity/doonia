@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { SlidersHorizontal, X, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/products/ProductCard";
 import ProductsByCategoryView from "@/components/products/ProductsByCategoryView";
 import { toProductFromRaw } from "@/lib/services/products";
@@ -120,59 +120,6 @@ export default function ProductsPage() {
     <div className="bg-gray-100 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-4">
 
-        {/* Page heading + search + sort bar */}
-        <div className="bg-white rounded-xl border border-gray-200 px-4 py-3 mb-4 flex flex-wrap items-center gap-3 shadow-sm">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-gray-900">
-              {debouncedSearch ? `Results for "${debouncedSearch}"` : "All Products"}
-            </h1>
-            <p className="text-xs text-gray-500">
-              {loading ? "Loading…" : `${meta.total} product${meta.total !== 1 ? "s" : ""} found`}
-            </p>
-          </div>
-
-          {/* Search input */}
-          <div className="flex items-center gap-2 flex-1 min-w-48 max-w-xs bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
-            <Search size={14} className="text-gray-400 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search products…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 min-w-0 text-sm text-gray-800 placeholder:text-gray-400 bg-transparent focus:outline-none"
-            />
-          </div>
-
-          {/* Sort */}
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            aria-label="Sort products"
-            title="Sort products"
-            className="hidden sm:block py-2 px-3 text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300"
-          >
-            {sortOptions.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-
-          {/* Filters toggle */}
-          <button
-            onClick={() => setFiltersOpen(!filtersOpen)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors",
-              filtersOpen || hasFilters
-                ? "bg-primary-500 text-white border-primary-500"
-                : "bg-gray-50 text-gray-600 border-gray-200 hover:border-primary-300"
-            )}
-          >
-            <SlidersHorizontal size={15} />
-            <span className="hidden sm:inline">Filters</span>
-            {hasFilters && (
-              <span className="bg-white text-primary-600 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">!</span>
-            )}
-          </button>
-        </div>
 
         {/* Category pills */}
         {categories.length > 0 && (
