@@ -102,7 +102,7 @@ class PaymentController extends Controller
             }
         }
 
-        Mail::to($order->customer_email)->queue(new OrderConfirmedMail($order));
+        Mail::to($order->customer_email)->sendNow(new OrderConfirmedMail($order));
 
         Log::info("Payment confirmed for order {$order->order_number}");
     }
