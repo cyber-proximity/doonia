@@ -105,7 +105,6 @@ class ProductForm
                                     ->disk('public')
                                     ->directory('products')
                                     ->afterStateHydrated(fn ($component) => $component->state(null))
-                                    ->dehydrateStateUsing(fn ($state, $record) => $state ?: $record?->url)
                                     ->required(fn ($record) => empty($record?->url)),
                                 TextInput::make('alt_text')
                                     ->label('Alt text')
