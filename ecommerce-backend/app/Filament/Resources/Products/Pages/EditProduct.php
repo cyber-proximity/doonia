@@ -9,10 +9,26 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Arr;
 
 class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
+
+    protected function afterSave(): void
+    {
+        $keptIds = collect(array_values($this->data['images'] ?? []))
+            ->pluck('id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->toArray();
+
+        if (empty($keptIds)) {
+            $this->record->images()->delete();
+        } else {
+            $this->record->images()->whereNotIn('id', $keptIds)->delete();
+        }
+    }
 
     protected function getHeaderActions(): array
     {
