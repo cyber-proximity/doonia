@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
@@ -11,8 +11,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class ProductForm
@@ -96,29 +94,30 @@ class ProductForm
                             ->hidden(fn () => auth()->user()->hasRole('staff')),
                     ]),
 
-                Section::make('Image')
+                Section::make('Images')
                     ->schema([
-                        Placeholder::make('current_image_preview')
-                            ->label('Current Image')
-                            ->content(function ($record) {
-                                if (! $record || $record->images->isEmpty()) {
-                                    return 'No image uploaded yet.';
-                                }
-                                $path = $record->images->firstWhere('is_primary', true)?->url
-                                    ?? $record->images->first()?->url;
-                                $url = Storage::disk('public')->url($path);
-                                return new HtmlString(
-                                    "<img src=\"{$url}\" style=\"max-height:160px;border-radius:8px;border:1px solid #e5e7eb;\">"
-                                );
-                            })
-                            ->hiddenOn('create'),
-                        FileUpload::make('new_primary_image')
-                            ->label(fn ($record) => $record && $record->images->isNotEmpty()
-                                ? 'Replace Image'
-                                : 'Upload Image')
-                            ->image()
-                            ->disk('public')
-                            ->directory('products'),
+                        Repeater::make('images')
+                            ->relationship()
+                            ->schema([
+                                FileUpload::make('url')
+                                    ->label('Image')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('products')
+                                    ->required(),
+                                TextInput::make('alt_text')
+                                    ->label('Alt text')
+                                    ->maxLength(255),
+                                Toggle::make('is_primary')
+                                    ->label('Primary image'),
+                                TextInput::make('sort_order')
+                                    ->label('Sort order')
+                                    ->numeric()
+                                    ->default(0),
+                            ])
+                            ->columns(2)
+                            ->addActionLabel('Add image')
+                            ->defaultItems(1),
                     ]),
             ]);
     }

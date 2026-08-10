@@ -14,25 +14,25 @@ class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
 
-    private ?string $newImagePath = null;
+    private array $imageIdsInForm = [];
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $this->newImagePath = $data['new_primary_image'] ?? null;
-        unset($data['new_primary_image']);
+        $this->imageIdsInForm = collect(array_values($data['images'] ?? []))
+            ->pluck('id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->toArray();
+
         return $data;
     }
 
     protected function afterSave(): void
     {
-        if ($this->newImagePath) {
+        if (empty($this->imageIdsInForm)) {
             $this->record->images()->delete();
-            $this->record->images()->create([
-                'url'        => $this->newImagePath,
-                'is_primary' => true,
-                'sort_order' => 0,
-                'alt_text'   => $this->record->name,
-            ]);
+        } else {
+            $this->record->images()->whereNotIn('id', $this->imageIdsInForm)->delete();
         }
     }
 
