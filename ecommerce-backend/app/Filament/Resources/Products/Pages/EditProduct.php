@@ -9,24 +9,30 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
-use Illuminate\Support\Arr;
 
 class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
 
+    private ?string $newImagePath = null;
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $this->newImagePath = $data['new_primary_image'] ?? null;
+        unset($data['new_primary_image']);
+        return $data;
+    }
+
     protected function afterSave(): void
     {
-        $keptIds = collect(array_values($this->data['images'] ?? []))
-            ->pluck('id')
-            ->filter()
-            ->map(fn ($id) => (int) $id)
-            ->toArray();
-
-        if (empty($keptIds)) {
+        if ($this->newImagePath) {
             $this->record->images()->delete();
-        } else {
-            $this->record->images()->whereNotIn('id', $keptIds)->delete();
+            $this->record->images()->create([
+                'url'        => $this->newImagePath,
+                'is_primary' => true,
+                'sort_order' => 0,
+                'alt_text'   => $this->record->name,
+            ]);
         }
     }
 
