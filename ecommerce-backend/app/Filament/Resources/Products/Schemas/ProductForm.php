@@ -104,7 +104,6 @@ class ProductForm
                                     ->image()
                                     ->disk('public')
                                     ->directory('products')
-                                    ->fetchFileInformation(false)
                                     ->required(),
                                 TextInput::make('alt_text')
                                     ->label('Alt text')
