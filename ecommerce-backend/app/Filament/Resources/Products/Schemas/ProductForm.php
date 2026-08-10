@@ -104,8 +104,9 @@ class ProductForm
                                     ->image()
                                     ->disk('public')
                                     ->directory('products')
-                                    ->fetchFileInformation(false)
-                                    ->required(),
+                                    ->afterStateHydrated(fn ($component) => $component->state(null))
+                                    ->dehydrateStateUsing(fn ($state, $record) => $state ?: $record?->url)
+                                    ->required(fn ($record) => empty($record?->url)),
                                 TextInput::make('alt_text')
                                     ->label('Alt text')
                                     ->maxLength(255),

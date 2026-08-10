@@ -14,11 +14,20 @@ class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
 
+    private bool $hasAnyImagesInForm = false;
     private array $imageIdsInForm = [];
+    private array $existingImageUrls = [];
+
+    protected function beforeSave(): void
+    {
+        $this->existingImageUrls = $this->record->images()->pluck('url', 'id')->toArray();
+    }
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $this->imageIdsInForm = collect(array_values($data['images'] ?? []))
+        $images = array_values($data['images'] ?? []);
+        $this->hasAnyImagesInForm = ! empty($images);
+        $this->imageIdsInForm = collect($images)
             ->pluck('id')
             ->filter()
             ->map(fn ($id) => (int) $id)
@@ -29,11 +38,25 @@ class EditProduct extends EditRecord
 
     protected function afterSave(): void
     {
-        if (empty($this->imageIdsInForm)) {
+        // Safety net: restore URLs cleared by afterStateHydrated when no new file was uploaded
+        foreach ($this->existingImageUrls as $id => $url) {
+            $this->record->images()
+                ->where('id', $id)
+                ->whereNull('url')
+                ->update(['url' => $url]);
+        }
+
+        // Sync deletes: remove images the user removed from the Repeater
+        if (! $this->hasAnyImagesInForm) {
             $this->record->images()->delete();
-        } else {
+        } elseif (! empty($this->imageIdsInForm)) {
             $this->record->images()->whereNotIn('id', $this->imageIdsInForm)->delete();
         }
+
+        // Clean up any null-URL images (new rows where no file was uploaded)
+        $this->record->images()->where(function ($q) {
+            $q->whereNull('url')->orWhere('url', '');
+        })->delete();
     }
 
     protected function getHeaderActions(): array
