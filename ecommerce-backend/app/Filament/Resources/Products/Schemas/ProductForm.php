@@ -5,12 +5,16 @@ namespace App\Filament\Resources\Products\Schemas;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
+use Filament\Schemas\Components\Placeholder;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class ProductForm
@@ -99,13 +103,28 @@ class ProductForm
                         Repeater::make('images')
                             ->relationship()
                             ->schema([
+                                // Stash the existing URL in Livewire state so we can restore it
+                                // if the admin saves without uploading a replacement.
+                                TextInput::make('_existing_url')
+                                    ->hidden(),
+
+                                // Static preview of the currently saved image (no FilePond restore).
+                                Placeholder::make('image_preview')
+                                    ->label('Current Image')
+                                    ->content(fn (Get $get): HtmlString => $get('_existing_url')
+                                        ? new HtmlString('<img src="' . Storage::disk('public')->url($get('_existing_url')) . '" style="max-width:180px;max-height:140px;object-fit:contain;border-radius:6px;">')
+                                        : new HtmlString('<span style="font-size:.875rem;color:#6b7280">No image yet</span>')
+                                    )
+                                    ->columnSpan(2),
+
                                 FileUpload::make('url')
-                                    ->label('Image')
+                                    ->label(fn (Get $get): string => $get('_existing_url') ? 'Replace Image' : 'Upload Image')
+                                    ->helperText(fn (Get $get): string => $get('_existing_url') ? 'Leave empty to keep the current image' : '')
                                     ->image()
                                     ->disk('public')
                                     ->directory('products')
-                                    ->afterStateHydrated(fn ($component) => $component->state(null))
-                                    ->required(fn ($record) => empty($record?->url)),
+                                    ->required(fn (Get $get): bool => empty($get('_existing_url'))),
+
                                 TextInput::make('alt_text')
                                     ->label('Alt text')
                                     ->maxLength(255),
@@ -116,6 +135,27 @@ class ProductForm
                                     ->numeric()
                                     ->default(0),
                             ])
+                            // Runs once on initial page load: moves the stored URL into _existing_url
+                            // and clears `url` so FilePond starts empty (no restore request → no loading).
+                            ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
+                                $data['_existing_url'] = $data['url'] ?? null;
+                                $data['url'] = null;
+                                return $data;
+                            })
+                            // Runs before updating an existing image record: if no new file was
+                            // uploaded (url still null), restore the original path from _existing_url.
+                            ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
+                                if (empty($data['url'])) {
+                                    $data['url'] = $data['_existing_url'] ?? null;
+                                }
+                                unset($data['_existing_url']);
+                                return $data;
+                            })
+                            // Runs before creating a new image record: just strip _existing_url.
+                            ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                                unset($data['_existing_url']);
+                                return $data;
+                            })
                             ->columns(2)
                             ->addActionLabel('Add image')
                             ->defaultItems(1),

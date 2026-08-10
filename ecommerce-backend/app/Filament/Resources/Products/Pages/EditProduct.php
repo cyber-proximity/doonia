@@ -38,7 +38,7 @@ class EditProduct extends EditRecord
 
     protected function afterSave(): void
     {
-        // Safety net: restore URLs cleared by afterStateHydrated when no new file was uploaded
+        // Safety net: if url ended up null (no new upload), restore the original path.
         foreach ($this->existingImageUrls as $id => $url) {
             $this->record->images()
                 ->where('id', $id)
