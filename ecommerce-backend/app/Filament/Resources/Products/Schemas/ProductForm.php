@@ -38,7 +38,7 @@ class ProductForm
                             ->columnSpanFull(),
                         TextInput::make('slug')
                             ->required()
-                            ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) => $rule->whereNull('deleted_at'))
+                            ->unique(table: 'products', column: 'slug', ignoreRecord: true)
                             ->maxLength(255),
                         Select::make('category_id')
                             ->relationship('category', 'name')
@@ -68,7 +68,7 @@ class ProductForm
                         TextInput::make('sku')
                             ->label('SKU')
                             ->required()
-                            ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) => $rule->whereNull('deleted_at'))
+                            ->unique(table: 'products', column: 'sku', ignoreRecord: true)
                             ->maxLength(100),
                         TextInput::make('stock_quantity')
                             ->required()
