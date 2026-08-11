@@ -14,8 +14,6 @@ class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
 
-    private bool $hasAnyImagesInForm = false;
-    private array $imageIdsInForm = [];
     private array $existingImageUrls = [];
 
     protected function beforeSave(): void
@@ -23,22 +21,10 @@ class EditProduct extends EditRecord
         $this->existingImageUrls = $this->record->images()->pluck('url', 'id')->toArray();
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        $images = array_values($data['images'] ?? []);
-        $this->hasAnyImagesInForm = ! empty($images);
-        $this->imageIdsInForm = collect($images)
-            ->pluck('id')
-            ->filter()
-            ->map(fn ($id) => (int) $id)
-            ->toArray();
-
-        return $data;
-    }
-
     protected function afterSave(): void
     {
-        // Safety net: if url ended up null (no new upload), restore the original path.
+        // Safety net: mutateRelationshipDataBeforeSaveUsing should handle this, but if a
+        // url ended up null it means no new file was uploaded — restore from the pre-save snapshot.
         foreach ($this->existingImageUrls as $id => $url) {
             $this->record->images()
                 ->where('id', $id)
@@ -46,14 +32,7 @@ class EditProduct extends EditRecord
                 ->update(['url' => $url]);
         }
 
-        // Sync deletes: remove images the user removed from the Repeater
-        if (! $this->hasAnyImagesInForm) {
-            $this->record->images()->delete();
-        } elseif (! empty($this->imageIdsInForm)) {
-            $this->record->images()->whereNotIn('id', $this->imageIdsInForm)->delete();
-        }
-
-        // Clean up any null-URL images (new rows where no file was uploaded)
+        // Clean up orphan rows where a new image slot was added but nothing was uploaded.
         $this->record->images()->where(function ($q) {
             $q->whereNull('url')->orWhere('url', '');
         })->delete();
