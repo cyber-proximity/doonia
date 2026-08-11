@@ -174,7 +174,7 @@ export async function getProductBySlug(
 ): Promise<{ product: Product; related: Product[] } | null> {
   try {
     const res = await fetch(`${BASE}/products/${slug}`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
     if (!res.ok) return null;
     const { data } = (await res.json()) as { data: RawProduct };
