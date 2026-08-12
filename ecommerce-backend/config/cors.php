@@ -7,12 +7,14 @@ return [
 
     'allowed_origins' => [
         'http://localhost:3000',
-        'https://yourdomain.com',
-        'https://www.yourdomain.com',
-        'https://2be9-154-161-23-12.ngrok-free.app',
+        'https://doonia.store',
+        'https://www.doonia.store',
+        'https://doonia.vercel.app',
     ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '#^https://doonia-.*\.vercel\.app$#',
+    ],
 
     'allowed_headers' => ['*'],
 
