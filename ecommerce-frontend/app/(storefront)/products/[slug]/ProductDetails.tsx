@@ -291,9 +291,10 @@ export default function ProductDetails({ product, related }: Props) {
             </div>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
-              {product.description}
-            </p>
+            <div
+              className="text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-3 [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2 [&_li]:mb-0.5 [&_strong]:font-semibold [&_em]:italic [&_a]:text-primary-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
 
             {/* Promotions */}
             <div className="border border-gray-200 rounded-lg overflow-hidden">
