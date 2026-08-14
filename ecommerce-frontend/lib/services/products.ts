@@ -47,7 +47,7 @@ function toCategory(raw: RawCategory): Category {
     id: raw.id,
     name: raw.name,
     slug: raw.slug,
-    image: raw.image ?? "",
+    image: raw.image ? proxyBackendImage(raw.image) : "",
     productCount: raw.product_count ?? 0,
   };
 }

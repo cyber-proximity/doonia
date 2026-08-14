@@ -24,6 +24,6 @@ class CategoryResource extends JsonResource
 
     private function resolveUrl(string $path): string
     {
-        return str_starts_with($path, 'http') ? $path : Storage::url($path);
+        return str_starts_with($path, 'http') ? $path : Storage::disk('public')->url($path);
     }
 }
