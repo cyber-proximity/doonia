@@ -69,6 +69,7 @@ export interface CreateOrderPayload {
   customerPhone?: string;
   shippingAddress: ShippingAddress;
   items: { productId: number; quantity: number }[];
+  paymentCurrency?: "GHS" | "NGN" | "USD";
 }
 
 export interface CreateOrderResult {
@@ -81,13 +82,14 @@ export async function createOrder(
   payload: CreateOrderPayload
 ): Promise<CreateOrderResult> {
   const { data } = await api.post("/v1/orders", {
-    customer_name: payload.customerName,
-    customer_email: payload.customerEmail,
-    customer_phone: payload.customerPhone,
-    shipping_address: payload.shippingAddress,
+    customer_name:     payload.customerName,
+    customer_email:    payload.customerEmail,
+    customer_phone:    payload.customerPhone,
+    shipping_address:  payload.shippingAddress,
+    payment_currency:  payload.paymentCurrency ?? "GHS",
     items: payload.items.map((i) => ({
       product_id: i.productId,
-      quantity: i.quantity,
+      quantity:   i.quantity,
     })),
   });
 

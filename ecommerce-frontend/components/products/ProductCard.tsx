@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
 import { Product } from "@/types";
-import { formatPrice, getDiscountPercent } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/utils";
+import { useCurrency } from "@/lib/context/CurrencyContext";
 import { useCartStore } from "@/store/cartStore";
 import { useState } from "react";
 
@@ -14,6 +15,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem   = useCartStore((s) => s.addItem);
+  const { format } = useCurrency();
   const [added, setAdded] = useState(false);
 
   const image    = product.images.find((i) => i.isPrimary) ?? product.images[0];
@@ -63,11 +65,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-end justify-between gap-1">
             <div>
               <p className="text-sm font-extrabold text-gray-900 leading-tight">
-                {formatPrice(product.price)}
+                {format(product.price)}
               </p>
               {product.compareAtPrice && (
                 <p className="text-[11px] text-gray-400 line-through leading-tight">
-                  {formatPrice(product.compareAtPrice)}
+                  {format(product.compareAtPrice)}
                 </p>
               )}
             </div>

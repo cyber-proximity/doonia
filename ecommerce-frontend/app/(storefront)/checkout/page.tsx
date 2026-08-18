@@ -10,7 +10,7 @@ import { ShoppingBag, ArrowLeft, Lock } from "lucide-react";
 import { useCartStore, selectTotal, selectItemCount } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import { createOrder } from "@/lib/services/orders";
-import { formatPrice } from "@/lib/utils";
+import { useCurrency } from "@/lib/context/CurrencyContext";
 
 const schema = z.object({
   customerName:  z.string().min(2, "Full name is required"),
@@ -29,6 +29,7 @@ export default function CheckoutPage() {
   const total     = useCartStore(selectTotal);
   const itemCount = useCartStore(selectItemCount);
   const { user } = useAuthStore();
+  const { format, paymentCurrency, paymentAmount } = useCurrency();
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -79,6 +80,7 @@ export default function CheckoutPage() {
           productId: i.product.id,
           quantity:  i.quantity,
         })),
+        paymentCurrency,
       });
 
       clearCart();
@@ -204,7 +206,7 @@ export default function CheckoutPage() {
                           <p className="text-xs font-medium text-gray-800 truncate">{product.name}</p>
                           <p className="text-xs text-gray-400">Qty: {quantity}</p>
                         </div>
-                        <p className="text-sm font-semibold text-gray-800 shrink-0">{formatPrice(product.price * quantity)}</p>
+                        <p className="text-sm font-semibold text-gray-800 shrink-0">{format(product.price * quantity)}</p>
                       </div>
                     );
                   })}
@@ -213,17 +215,17 @@ export default function CheckoutPage() {
                 <div className="border-t border-gray-100 pt-4 space-y-2 text-sm">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal</span>
-                    <span>{formatPrice(total)}</span>
+                    <span>{format(total)}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
                     <span className={shipping === 0 ? "text-green-600 font-medium" : ""}>
-                      {shipping === 0 ? "Free" : formatPrice(shipping)}
+                      {shipping === 0 ? "Free" : format(shipping)}
                     </span>
                   </div>
                   <div className="flex justify-between font-bold text-base text-gray-900 pt-2 border-t border-gray-100">
                     <span>Total</span>
-                    <span>{formatPrice(grandTotal)}</span>
+                    <span>{format(grandTotal)}</span>
                   </div>
                 </div>
 
@@ -233,7 +235,7 @@ export default function CheckoutPage() {
                   className="mt-5 w-full flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm"
                 >
                   <Lock size={16} />
-                  {loading ? "Redirecting to Paystack…" : `Pay ${formatPrice(grandTotal)}`}
+                  {loading ? "Redirecting to Paystack…" : `Pay ${format(grandTotal)} (${paymentCurrency})`}
                 </button>
 
                 <p className="mt-3 text-center text-xs text-gray-400 flex items-center justify-center gap-1">

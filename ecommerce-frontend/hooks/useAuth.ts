@@ -17,6 +17,7 @@ export function useAuth() {
     name: string;
     email: string;
     phone: string;
+    country?: string;
     password: string;
     password_confirmation: string;
   }) {

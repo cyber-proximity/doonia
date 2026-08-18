@@ -5,8 +5,29 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Phone, Globe } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+
+const COUNTRIES = [
+  "Ghana", "Nigeria", "China",
+  "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", "Australia",
+  "Austria", "Bangladesh", "Belgium", "Benin", "Bolivia", "Brazil",
+  "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Chad",
+  "Chile", "Colombia", "Congo", "Côte d'Ivoire", "Cuba", "Denmark",
+  "Ecuador", "Egypt", "Ethiopia", "Finland", "France", "Gabon", "Gambia",
+  "Germany", "Guinea", "Haiti", "Hungary", "India", "Indonesia", "Iran",
+  "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+  "Kenya", "Kuwait", "Lebanon", "Liberia", "Libya", "Madagascar", "Malawi",
+  "Malaysia", "Mali", "Mauritania", "Mexico", "Morocco", "Mozambique",
+  "Myanmar", "Namibia", "Nepal", "Netherlands", "New Zealand", "Niger",
+  "Norway", "Oman", "Pakistan", "Peru", "Philippines", "Poland",
+  "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saudi Arabia",
+  "Senegal", "Sierra Leone", "Singapore", "Somalia", "South Africa",
+  "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Sweden",
+  "Switzerland", "Syria", "Tanzania", "Thailand", "Togo", "Tunisia",
+  "Turkey", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom",
+  "United States", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe",
+];
 
 const passwordRules = z
   .string()
@@ -20,6 +41,7 @@ const schema = z
     name:                  z.string().min(2, "Name must be at least 2 characters"),
     email:                 z.string().email("Enter a valid email address"),
     phone:                 z.string().optional(),
+    country:               z.string().optional(),
     password:              passwordRules,
     password_confirmation: z.string(),
   })
@@ -45,10 +67,11 @@ export default function RegisterPage() {
     setServerError("");
     try {
       await registerUser({
-        name: data.name,
-        email: data.email,
-        phone: data.phone ?? "",
-        password: data.password,
+        name:                  data.name,
+        email:                 data.email,
+        phone:                 data.phone ?? "",
+        country:               data.country ?? "",
+        password:              data.password,
         password_confirmation: data.password_confirmation,
       });
     } catch (err) {
@@ -99,18 +122,38 @@ export default function RegisterPage() {
             {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Phone number <span className="text-gray-400 font-normal">(optional)</span>
-            </label>
-            <div className="relative">
-              <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                {...register("phone")}
-                type="tel"
-                placeholder="+233 20 000 0000"
-                className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent transition bg-gray-50"
-              />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Phone <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <div className="relative">
+                <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  {...register("phone")}
+                  type="tel"
+                  placeholder="+233 20 000 0000"
+                  className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent transition bg-gray-50"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Country <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <div className="relative">
+                <Globe size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <select
+                  {...register("country")}
+                  className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent transition bg-gray-50 appearance-none"
+                >
+                  <option value="">Select…</option>
+                  {COUNTRIES.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 

@@ -12,6 +12,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import InlineSearchBar from "@/components/search/InlineSearchBar";
+import CurrencySwitch from "@/components/layout/CurrencySwitch";
 
 
 interface NavCategory { id: number; name: string; slug: string; }
@@ -170,6 +171,9 @@ export default function Header() {
               <span className="text-[10px] leading-none font-medium hidden lg:block">Sign In</span>
             </Link>
           )}
+
+          {/* Currency switcher */}
+          <CurrencySwitch />
 
           {/* Cart — hidden on mobile (lives in BottomNav) */}
           <Link

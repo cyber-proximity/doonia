@@ -8,6 +8,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -50,13 +51,25 @@ class OrderController extends Controller
             ];
         }
 
-        $shippingFee = $subtotal >= 200 ? 0.0 : 15.0;
-        $total       = $subtotal + $shippingFee;
-        $orderNumber = 'DOO-' . strtoupper(Str::random(8));
-        $paystackRef = $orderNumber . '-' . time();
+        $shippingFee     = $subtotal >= 200 ? 0.0 : 15.0;
+        $total           = $subtotal + $shippingFee;
+        $orderNumber     = 'DOO-' . strtoupper(Str::random(8));
+        $paystackRef     = $orderNumber . '-' . time();
+
+        // Resolve payment currency (GHS default; NGN or USD for international)
+        $paymentCurrency = strtoupper($request->input('payment_currency', 'GHS'));
+        if (! in_array($paymentCurrency, ['GHS', 'NGN', 'USD'])) {
+            $paymentCurrency = 'GHS';
+        }
+
+        $paymentTotal = match ($paymentCurrency) {
+            'NGN'   => $total * (float) (Setting::get('ghs_to_ngn') ?? 15.38),
+            'USD'   => $total * (float) (Setting::get('ghs_to_usd') ?? 0.063),
+            default => $total,
+        };
 
         // --- 2. Persist order in a DB transaction ---
-        $order = DB::transaction(function () use ($request, $cartLines, $subtotal, $shippingFee, $total, $orderNumber, $paystackRef) {
+        $order = DB::transaction(function () use ($request, $cartLines, $subtotal, $shippingFee, $total, $orderNumber, $paystackRef, $paymentCurrency) {
             $order = Order::create([
                 'order_number'      => $orderNumber,
                 'user_id'           => auth()->id(),
@@ -89,7 +102,7 @@ class OrderController extends Controller
                 'order_id'           => $order->id,
                 'paystack_reference' => $paystackRef,
                 'amount'             => $total,
-                'currency'           => 'GHS',
+                'currency'           => $paymentCurrency,
                 'status'             => 'pending',
             ]);
 
@@ -102,10 +115,10 @@ class OrderController extends Controller
         $psResponse = Http::withToken(config('services.paystack.secret_key'))
             ->post('https://api.paystack.co/transaction/initialize', [
                 'email'        => $order->customer_email,
-                'amount'       => (int) round($total * 100), // pesewas
+                'amount'       => (int) round($paymentTotal * 100), // smallest unit
                 'reference'    => $paystackRef,
                 'callback_url' => $callbackUrl,
-                'currency'     => 'GHS',
+                'currency'     => $paymentCurrency,
                 'metadata'     => [
                     'order_number'  => $orderNumber,
                     'custom_fields' => [[
