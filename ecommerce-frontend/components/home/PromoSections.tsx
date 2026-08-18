@@ -1,8 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Truck, ShieldCheck, RefreshCw, HeadphonesIcon } from "lucide-react";
 import { useCurrency } from "@/lib/context/CurrencyContext";
+
+const FREE_SHIPPING_THRESHOLD_GHS = 200;
+
+export function TrustBar() {
+  const { format } = useCurrency();
+
+  const trust = [
+    { icon: Truck,           label: "Free Delivery",  note: `Orders above ${format(FREE_SHIPPING_THRESHOLD_GHS)}` },
+    { icon: ShieldCheck,     label: "Secure Payment", note: "100% protected" },
+    { icon: RefreshCw,       label: "Easy Returns",   note: "7-day policy" },
+    { icon: HeadphonesIcon,  label: "24/7 Support",   note: "Always here" },
+  ];
+
+  return (
+    <div className="bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
+          {trust.map(({ icon: Icon, label, note }) => (
+            <div key={label} className="flex items-center gap-2.5 px-3 py-2.5">
+              <Icon size={18} className="text-primary-500 shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-gray-800 leading-none">{label}</p>
+                <p className="text-[10px] text-gray-500 mt-0.5 leading-none">{note}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // The welcome discount is 20 GHS — converted to display currency
 const DISCOUNT_GHS = 20;

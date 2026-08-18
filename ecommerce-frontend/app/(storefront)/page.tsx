@@ -1,27 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronRight, Truck, ShieldCheck, RefreshCw, HeadphonesIcon } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/products/ProductCard";
 import HeroBannerSlider from "@/components/home/HeroBannerSlider";
 import FlashSaleSection from "@/components/home/FlashSaleSection";
 import CategorySidebar from "@/components/home/CategorySidebar";
 import { getFeaturedProducts, getCategories, getProducts } from "@/lib/services/products";
-import { SmallBannerA, NewsletterBanner } from "@/components/home/PromoSections";
+import { SmallBannerA, NewsletterBanner, TrustBar } from "@/components/home/PromoSections";
 
 export const metadata: Metadata = {
   title: "Doonia — Ghana's Online Marketplace",
   description: "Shop quality electronics, fashion, home goods and more. Fast delivery across Ghana.",
   alternates: { canonical: "/" },
 };
-
-/* ─── tiny trust bar ──────────────────────────────────────────────────── */
-const trust = [
-  { icon: Truck,           label: "Free Delivery",  note: "Orders above GH₵200" },
-  { icon: ShieldCheck,     label: "Secure Payment", note: "100% protected" },
-  { icon: RefreshCw,       label: "Easy Returns",   note: "7-day policy" },
-  { icon: HeadphonesIcon,  label: "24/7 Support",   note: "Always here" },
-];
 
 /* ─── small side banners ─────────────────────────────────────────────── */
 function SmallBannerB() {
@@ -60,21 +52,7 @@ export default async function HomePage() {
     <div className="bg-[#f5f5f5] min-h-screen">
 
       {/* ── Trust bar ── */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
-            {trust.map(({ icon: Icon, label, note }) => (
-              <div key={label} className="flex items-center gap-2.5 px-3 py-2.5">
-                <Icon size={18} className="text-primary-500 shrink-0" />
-                <div>
-                  <p className="text-xs font-semibold text-gray-800 leading-none">{label}</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5 leading-none">{note}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <TrustBar />
 
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 space-y-3">
 
