@@ -12,11 +12,10 @@ use Filament\Schemas\Schema;
 
 class Settings extends Page
 {
-    protected static $navigationIcon  = 'heroicon-o-cog-6-tooth';
-    protected static string $view     = 'filament.pages.settings';
-    protected static $navigationLabel = 'Settings';
-    protected static $title           = 'Store Settings';
-    protected static $navigationSort  = 99;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string $view                           = 'filament.pages.settings';
+    protected static ?string $navigationLabel               = 'Settings';
+    protected static ?int $navigationSort                   = 99;
 
     public ?array $data = [];
 
