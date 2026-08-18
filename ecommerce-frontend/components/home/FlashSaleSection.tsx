@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Zap, ArrowRight, ShoppingCart } from "lucide-react";
 import { Product } from "@/types";
-import { formatPrice, getDiscountPercent } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/utils";
+import { useCurrency } from "@/lib/context/CurrencyContext";
 import { useCartStore } from "@/store/cartStore";
 import StarRating from "@/components/ui/StarRating";
 
@@ -48,6 +49,7 @@ function Digit({ value, label }: { value: number; label: string }) {
 
 function FlashCard({ product }: { product: Product }) {
   const addItem  = useCartStore((s) => s.addItem);
+  const { format } = useCurrency();
   const [added, setAdded] = useState(false);
   const image    = product.images.find((i) => i.isPrimary) ?? product.images[0];
   const discount = product.compareAtPrice
@@ -90,9 +92,9 @@ function FlashCard({ product }: { product: Product }) {
           )}
           <div className="flex items-center justify-between gap-1">
             <div>
-              <p className="text-sm font-extrabold text-gray-900">{formatPrice(product.price)}</p>
+              <p className="text-sm font-extrabold text-gray-900">{format(product.price)}</p>
               {product.compareAtPrice && (
-                <p className="text-[10px] text-gray-400 line-through">{formatPrice(product.compareAtPrice)}</p>
+                <p className="text-[10px] text-gray-400 line-through">{format(product.compareAtPrice)}</p>
               )}
             </div>
             <button
