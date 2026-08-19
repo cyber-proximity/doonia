@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Mail\ResetPasswordMail;
 use App\Models\Order;
 use App\Observers\OrderObserver;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,10 +17,16 @@ class AppServiceProvider extends ServiceProvider
     {
         Order::observe(OrderObserver::class);
 
-        // Point password reset links at the Next.js frontend, not the Laravel backend.
+        // Send a branded Doonnia email instead of the default Laravel notification.
         ResetPassword::createUrlUsing(function ($user, string $token) {
             $base = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:3000')), '/');
             return $base . '/reset-password?token=' . $token . '&email=' . urlencode($user->getEmailForPasswordReset());
+        });
+
+        ResetPassword::toMailUsing(function ($user, string $token) {
+            $base     = rtrim(config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:3000')), '/');
+            $resetUrl = $base . '/reset-password?token=' . $token . '&email=' . urlencode($user->getEmailForPasswordReset());
+            return new ResetPasswordMail($user, $resetUrl);
         });
     }
 }

@@ -1,6 +1,6 @@
 @php
     $recipientEmail = $user->email;
-    $subject        = 'Welcome to Doonia!';
+    $subject        = 'Welcome to Doonnia!';
     $frontendUrl    = config('app.frontend_url');
     $firstName      = explode(' ', $user->name)[0];
 @endphp
@@ -13,7 +13,7 @@
   <tr>
     <td align="center" style="padding-bottom:24px;">
       <div style="font-size:48px;line-height:1;">🎉</div>
-      <h1 style="margin:16px 0 8px;font-size:22px;font-weight:700;color:#111827;">Welcome to Doonia, {{ $firstName }}!</h1>
+      <h1 style="margin:16px 0 8px;font-size:22px;font-weight:700;color:#111827;">Welcome to Doonnia, {{ $firstName }}!</h1>
       <p style="margin:0;color:#6b7280;font-size:15px;">Your account has been created. Happy shopping!</p>
     </td>
   </tr>
@@ -23,7 +23,7 @@
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb;border-radius:12px;margin-bottom:28px;">
   <tr>
     <td style="padding:20px 24px;">
-      <p style="margin:0 0 12px;font-size:14px;font-weight:700;color:#111827;">Here's what you can do on Doonia:</p>
+      <p style="margin:0 0 12px;font-size:14px;font-weight:700;color:#111827;">Here's what you can do on Doonnia:</p>
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding:6px 0;font-size:14px;color:#374151;">🛍️&nbsp; Browse thousands of products</td>

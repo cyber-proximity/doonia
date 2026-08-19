@@ -67,7 +67,7 @@
         View My Order
       </a>
       <p style="margin:16px 0 0;font-size:13px;color:#9ca3af;">
-        Thank you for shopping with Doonia!
+        Thank you for shopping with Doonnia!
       </p>
     </td>
   </tr>
