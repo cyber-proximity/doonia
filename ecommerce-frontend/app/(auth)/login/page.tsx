@@ -44,7 +44,7 @@ function LoginForm() {
       <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
-          <p className="text-gray-500 mt-2 text-sm">Sign in to your Doonia account</p>
+          <p className="text-gray-500 mt-2 text-sm">Sign in to your Doonnia account</p>
         </div>
 
         {serverError && (

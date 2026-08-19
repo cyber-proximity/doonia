@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     product.images.find((img) => img.isPrimary) ?? product.images[0];
   const desc = product.description
     ? product.description.replace(/<[^>]*>/g, "").slice(0, 155)
-    : `Buy ${product.name} at Doonia. Fast delivery across Ghana.`;
+    : `Buy ${product.name} at Doonnia. Fast delivery across Ghana.`;
 
   return {
     title: product.name,

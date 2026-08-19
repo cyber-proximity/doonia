@@ -10,7 +10,7 @@ import { getFeaturedProducts, getCategories, getProducts } from "@/lib/services/
 import { SmallBannerA, NewsletterBanner, TrustBar } from "@/components/home/PromoSections";
 
 export const metadata: Metadata = {
-  title: "Doonia — Ghana's Online Marketplace",
+  title: "Doonnia — Ghana's Online Marketplace",
   description: "Shop quality electronics, fashion, home goods and more. Fast delivery across Ghana.",
   alternates: { canonical: "/" },
 };

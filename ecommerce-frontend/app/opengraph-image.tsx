@@ -53,7 +53,7 @@ export default function OgImage() {
             lineHeight: 1,
           }}
         >
-          Doonia
+          Doonnia
         </div>
 
         {/* Tagline */}

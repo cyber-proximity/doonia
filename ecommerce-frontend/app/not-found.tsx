@@ -39,7 +39,7 @@ export default function RootNotFound() {
               fontSize: 15,
             }}
           >
-            Back to Doonia
+            Back to Doonnia
           </a>
         </div>
       </body>

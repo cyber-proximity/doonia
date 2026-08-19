@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Doonia",
-    short_name: "Doonia",
+    name: "Doonnia",
+    short_name: "Doonnia",
     description: "Ghana's Online Marketplace",
     start_url: "/",
     display: "standalone",

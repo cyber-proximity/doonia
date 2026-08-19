@@ -15,8 +15,8 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    template: "%s | Doonia",
-    default: "Doonia — Ghana's Online Marketplace",
+    template: "%s | Doonnia",
+    default: "Doonnia — Ghana's Online Marketplace",
   },
   description:
     "Shop quality electronics, fashion, home goods, beauty and more. Fast delivery across Ghana. Secure checkout with Paystack.",
@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     "fashion ghana",
     "doonia",
   ],
-  authors: [{ name: "Doonia" }],
-  creator: "Doonia",
-  publisher: "Doonia",
+  authors: [{ name: "Doonnia" }],
+  creator: "Doonnia",
+  publisher: "Doonnia",
   openGraph: {
     type: "website",
     locale: "en_GH",
-    siteName: "Doonia",
-    title: "Doonia — Ghana's Online Marketplace",
+    siteName: "Doonnia",
+    title: "Doonnia — Ghana's Online Marketplace",
     description:
       "Shop quality electronics, fashion, home goods and more. Fast delivery across Ghana.",
   },
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@dooniagh",
     creator: "@dooniagh",
-    title: "Doonia — Ghana's Online Marketplace",
+    title: "Doonnia — Ghana's Online Marketplace",
     description:
       "Shop quality electronics, fashion, home goods and more. Fast delivery across Ghana.",
   },

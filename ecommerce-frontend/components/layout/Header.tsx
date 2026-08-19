@@ -112,7 +112,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" className="shrink-0">
-            <span className="text-2xl font-extrabold text-white tracking-tight">Doonia</span>
+            <span className="text-2xl font-extrabold text-white tracking-tight">Doonnia</span>
           </Link>
 
           {/* Inline search — takes all remaining space */}

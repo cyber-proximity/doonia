@@ -31,7 +31,7 @@ export default function Footer() {
       <div className="bg-primary-600 py-4">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white font-semibold text-sm">
-            Download the Doonia App — Shop anywhere, anytime
+            Download the Doonnia App — Shop anywhere, anytime
           </p>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 text-xs font-medium cursor-pointer hover:bg-gray-800 transition-colors">
@@ -50,7 +50,7 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="space-y-4">
-            <span className="text-2xl font-extrabold text-white tracking-tight">Doonia</span>
+            <span className="text-2xl font-extrabold text-white tracking-tight">Doonnia</span>
             <p className="text-sm leading-relaxed text-gray-500">
               Your trusted online marketplace for quality products delivered across Ghana. Fast, secure, and affordable.
             </p>
@@ -140,7 +140,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-600">
-          <p>&copy; {new Date().getFullYear()} Doonia. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Doonnia. All rights reserved.</p>
           <div className="flex gap-5">
             <Link href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-gray-400 transition-colors">Terms of Service</Link>
