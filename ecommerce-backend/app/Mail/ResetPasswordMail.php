@@ -21,7 +21,10 @@ class ResetPasswordMail extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Reset Your Doonnia Password');
+        return new Envelope(
+            to:      $this->user->email,
+            subject: 'Reset Your Doonnia Password',
+        );
     }
 
     public function content(): Content
