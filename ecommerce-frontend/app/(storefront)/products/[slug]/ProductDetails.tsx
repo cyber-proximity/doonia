@@ -5,17 +5,19 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ShoppingCart, Minus, Plus, Truck, ShieldCheck,
-  RefreshCw, Heart, ZoomIn, CheckCircle, X,
+  RefreshCw, ZoomIn, CheckCircle, X,
   MapPin, Store, Package, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { FaFacebook, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Product } from "@/types";
-import { formatPrice, getDiscountPercent } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/utils";
+import { useCurrency } from "@/lib/context/CurrencyContext";
 import { useCartStore } from "@/store/cartStore";
 import ProductCard from "@/components/products/ProductCard";
 import StarRating from "@/components/ui/StarRating";
 import ReviewsSection from "@/components/reviews/ReviewsSection";
+import WishlistButton from "@/components/products/WishlistButton";
 
 interface Props {
   product: Product;
@@ -36,12 +38,22 @@ export default function ProductDetails({ product, related }: Props) {
   const addItem        = useCartStore((s) => s.addItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const cartItems      = useCartStore((s) => s.items);
+  const { format }     = useCurrency();
 
   const discount = product.compareAtPrice
     ? getDiscountPercent(product.price, product.compareAtPrice)
     : null;
 
   const images = product.images.filter((img) => img.url);
+
+  const wishlistItem = {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    price: product.price,
+    compareAtPrice: product.compareAtPrice,
+    imageUrl: (product.images.find((i) => i.isPrimary) ?? product.images[0])?.url ?? null,
+  };
 
   // Keep cartQty in sync with store
   useEffect(() => {
@@ -259,12 +271,12 @@ export default function ProductDetails({ product, related }: Props) {
             {/* Price row */}
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-3xl font-extrabold text-gray-900">
-                {formatPrice(product.price)}
+                {format(product.price)}
               </span>
               {product.compareAtPrice && (
                 <>
                   <span className="text-lg text-gray-400 line-through">
-                    {formatPrice(product.compareAtPrice)}
+                    {format(product.compareAtPrice)}
                   </span>
                   <span className="bg-red-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-sm">
                     -{discount}%
@@ -338,9 +350,7 @@ export default function ProductDetails({ product, related }: Props) {
                   <span className="text-sm text-gray-600 font-medium">
                     {cartQty} item{cartQty !== 1 ? "s" : ""} added
                   </span>
-                  <button className="p-2.5 border border-gray-300 rounded-lg text-gray-400 hover:text-red-500 hover:border-red-300 transition-colors">
-                    <Heart size={16} />
-                  </button>
+                  <WishlistButton item={wishlistItem} size={16} />
                 </div>
               ) : (
                 /* Not in cart — show qty picker + Add to Cart button */
@@ -363,9 +373,7 @@ export default function ProductDetails({ product, related }: Props) {
                         <Plus size={15} />
                       </button>
                     </div>
-                    <button className="p-2.5 border border-gray-300 rounded-lg text-gray-400 hover:text-red-500 hover:border-red-300 transition-colors">
-                      <Heart size={16} />
-                    </button>
+                    <WishlistButton item={wishlistItem} size={16} />
                   </div>
                   <button
                     onClick={handleAddToCart}
@@ -373,7 +381,7 @@ export default function ProductDetails({ product, related }: Props) {
                     className="flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-colors shadow-sm text-sm w-full"
                   >
                     <ShoppingCart size={18} />
-                    Add to Cart · {formatPrice(product.price * qty)}
+                    Add to Cart · {format(product.price * qty)}
                   </button>
                 </>
               )}

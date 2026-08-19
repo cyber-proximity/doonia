@@ -8,6 +8,7 @@ import { getDiscountPercent } from "@/lib/utils";
 import { useCurrency } from "@/lib/context/CurrencyContext";
 import { useCartStore } from "@/store/cartStore";
 import { useState } from "react";
+import WishlistButton from "@/components/products/WishlistButton";
 
 interface ProductCardProps {
   product: Product;
@@ -29,6 +30,15 @@ export default function ProductCard({ product }: ProductCardProps) {
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   }
+
+  const wishlistItem = {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    price: product.price,
+    compareAtPrice: product.compareAtPrice,
+    imageUrl: image?.url ?? null,
+  };
 
   return (
     <Link href={`/products/${product.slug}`} className="group block">
@@ -54,6 +64,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               -{discount}%
             </span>
           )}
+          <div className="absolute top-1.5 right-1.5">
+            <WishlistButton item={wishlistItem} size={13} className="!p-1.5 shadow-sm" />
+          </div>
         </div>
 
         {/* Info */}

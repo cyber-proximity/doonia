@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\SettingsController;
+use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/v1/health', fn () => response()->json(['status' => 'ok']));
@@ -54,6 +55,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/orders/{orderNumber}', [OrderController::class, 'show']);
     });
+});
+
+// Wishlist (all auth required)
+Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index']);
+    Route::post('/wishlist/sync', [WishlistController::class, 'sync']); // must precede {productId}
+    Route::post('/wishlist/{productId}', [WishlistController::class, 'add']);
+    Route::delete('/wishlist/{productId}', [WishlistController::class, 'remove']);
 });
 
 // Account (all auth required)

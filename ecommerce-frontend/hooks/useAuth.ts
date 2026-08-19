@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
+import { useWishlistStore } from "@/store/wishlistStore";
 import { AxiosError } from "axios";
 
 interface ApiError {
@@ -12,6 +13,7 @@ interface ApiError {
 export function useAuth() {
   const router = useRouter();
   const { user, token, isAuthenticated, setAuth, clearAuth } = useAuthStore();
+  const { syncGuestWishlist, clearItems } = useWishlistStore();
 
   async function register(data: {
     name: string;
@@ -23,12 +25,14 @@ export function useAuth() {
   }) {
     const res = await api.post("/v1/auth/register", data);
     setAuth(res.data.data.user, res.data.data.token);
+    await syncGuestWishlist().catch(() => {});
     router.push("/");
   }
 
   async function login(data: { email: string; password: string }, redirectTo?: string) {
     const res = await api.post("/v1/auth/login", data);
     setAuth(res.data.data.user, res.data.data.token);
+    await syncGuestWishlist().catch(() => {});
     router.push(redirectTo ?? "/");
   }
 
@@ -37,6 +41,7 @@ export function useAuth() {
       await api.post("/v1/auth/logout");
     } finally {
       clearAuth();
+      clearItems();
       router.push("/login");
     }
   }

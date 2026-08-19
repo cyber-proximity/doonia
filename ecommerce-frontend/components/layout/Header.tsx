@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   ShoppingCart, User, Package, LogOut,
-  ChevronRight, LayoutGrid,
+  ChevronRight, LayoutGrid, Heart,
 } from "lucide-react";
 import { useCartStore, selectItemCount } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
@@ -174,6 +174,16 @@ export default function Header() {
 
           {/* Currency switcher */}
           <CurrencySwitch />
+
+          {/* Wishlist — hidden on mobile (lives in BottomNav) */}
+          <Link
+            href="/wishlist"
+            className="relative hidden md:flex flex-col items-center gap-0.5 px-2 py-1 text-white/90 hover:text-white transition-colors shrink-0"
+            aria-label="Wishlist"
+          >
+            <Heart size={22} />
+            <span className="text-[10px] leading-none font-medium hidden lg:block">Wishlist</span>
+          </Link>
 
           {/* Cart — hidden on mobile (lives in BottomNav) */}
           <Link
