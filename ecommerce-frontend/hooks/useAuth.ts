@@ -50,10 +50,19 @@ export function useAuth() {
     await api.post("/v1/auth/forgot-password", { email });
   }
 
+  async function resetPassword(data: {
+    email: string;
+    token: string;
+    password: string;
+    password_confirmation: string;
+  }) {
+    await api.post("/v1/auth/reset-password", data);
+  }
+
   function getApiError(err: unknown): string {
     const axiosErr = err as AxiosError<ApiError>;
     return axiosErr.response?.data?.message ?? "Something went wrong. Please try again.";
   }
 
-  return { user, token, isAuthenticated, register, login, logout, forgotPassword, getApiError };
+  return { user, token, isAuthenticated, register, login, logout, forgotPassword, resetPassword, getApiError };
 }
