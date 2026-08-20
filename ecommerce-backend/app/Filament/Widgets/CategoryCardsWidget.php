@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryCardsWidget extends Widget
 {
-    protected static string $view = 'filament.widgets.category-cards-widget';
+    protected string $view = 'filament.widgets.category-cards-widget';
 
     protected int|string|array $columnSpan = 'full';
 
