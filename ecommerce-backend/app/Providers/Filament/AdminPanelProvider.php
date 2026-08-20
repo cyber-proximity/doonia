@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -31,9 +32,18 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::hex('#00B5C8'),
             ])
             ->font('Inter')
-            ->brandName('Doonia')
+            ->brandName('Doonnia')
             ->brandLogo(asset('images/logo.png'))
             ->favicon(asset('images/favicon.png'))
+            ->navigationGroups([
+                NavigationGroup::make('Catalog'),
+                NavigationGroup::make('Sales'),
+                NavigationGroup::make('Team'),
+            ])
+            ->renderHook(
+                'panels::head.end',
+                fn () => view('filament.admin-theme'),
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
