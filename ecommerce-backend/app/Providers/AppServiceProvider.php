@@ -5,13 +5,24 @@ namespace App\Providers;
 use App\Mail\ResetPasswordMail;
 use App\Models\Order;
 use App\Observers\OrderObserver;
+use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->bind(LogoutResponseContract::class, function () {
+            return new class implements LogoutResponseContract {
+                public function toResponse($request)
+                {
+                    return redirect('/admin/login');
+                }
+            };
+        });
+    }
 
     public function boot(): void
     {
