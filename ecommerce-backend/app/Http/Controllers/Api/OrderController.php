@@ -51,7 +51,7 @@ class OrderController extends Controller
             ];
         }
 
-        $shippingFee     = $subtotal >= 200 ? 0.0 : 15.0;
+        $shippingFee     = 0.0;
         $total           = $subtotal + $shippingFee;
         $orderNumber     = 'DOO-' . strtoupper(Str::random(8));
         $paystackRef     = $orderNumber . '-' . time();
