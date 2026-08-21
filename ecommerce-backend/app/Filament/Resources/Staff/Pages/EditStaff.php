@@ -13,7 +13,8 @@ class EditStaff extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->using(fn ($record) => $record->forceDelete()),
         ];
     }
 
