@@ -16,7 +16,7 @@ class CreateStaff extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $this->plainPassword = Str::password(12);
+        $this->plainPassword = Str::random(8) . rand(10, 99) . '!';
         $data['password']    = bcrypt($this->plainPassword);
 
         return $data;
