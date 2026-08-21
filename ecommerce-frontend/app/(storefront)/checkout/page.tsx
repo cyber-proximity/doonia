@@ -53,7 +53,7 @@ export default function CheckoutPage() {
   const [serverError, setServerError] = useState("");
   const [loading,     setLoading]     = useState(false);
 
-  const shipping   = total >= 200 ? 0 : 15;
+  const shipping   = 0;
   const grandTotal = total + shipping;
 
   /* ── Contact form ── */

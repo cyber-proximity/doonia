@@ -15,7 +15,7 @@ export default function CartPage() {
   const itemCount      = useCartStore(selectItemCount);
   const total          = useCartStore(selectTotal);
 
-  const shipping   = total >= 200 ? 0 : 15;
+  const shipping   = 0;
   const grandTotal = total + shipping;
 
   // Confirm-removal dialog state
