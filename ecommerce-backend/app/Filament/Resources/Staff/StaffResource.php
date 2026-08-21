@@ -59,7 +59,12 @@ class StaffResource extends Resource
                     TextInput::make('email')
                         ->email()
                         ->required()
-                        ->unique(User::class, 'email', ignoreRecord: true)
+                        ->unique(
+                            table: User::class,
+                            column: 'email',
+                            ignoreRecord: true,
+                            modifyRuleUsing: fn ($rule) => $rule->whereNull('deleted_at'),
+                        )
                         ->maxLength(255),
 
                     TextInput::make('phone')
