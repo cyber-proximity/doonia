@@ -68,11 +68,10 @@ class StaffResource extends Resource
 
                     TextInput::make('password')
                         ->password()
-                        ->required(fn (string $operation) => $operation === 'create')
-                        ->minLength(8)
+                        ->visibleOn('edit')
                         ->dehydrated(fn (?string $state) => filled($state))
                         ->dehydrateStateUsing(fn (string $state) => bcrypt($state))
-                        ->label(fn (string $operation) => $operation === 'edit' ? 'New Password (leave blank to keep)' : 'Password'),
+                        ->label('New Password (leave blank to keep)'),
                 ]),
         ]);
     }
